@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberTic Tac Toe | Modern Glassmorphism Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Floating Background Orbs for Glass Refraction -->
+  <div class="ambient-background">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Particle / Confetti Canvas -->
+  <canvas id="fx-canvas"></canvas>
+
+  <main class="app-container">
+    <!-- Main Glass Card -->
+    <div class="glass-card main-card">
+      
+      <!-- Header -->
+      <header class="game-header">
+        <div class="header-top">
+          <div class="badge-tag">NEXT-GEN ARCADE</div>
+          <button id="sound-toggle" class="glass-icon-btn" aria-label="Toggle Sound" title="Toggle Sound">
+            <svg id="sound-on-icon" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg id="sound-off-icon" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+        </div>
+        <h1 class="title">
+          <span class="x-glow">TIC</span>
+          <span class="divider">•</span>
+          <span class="o-glow">TAC</span>
+          <span class="divider">•</span>
+          <span class="accent-glow">TOE</span>
+        </h1>
+      </header>
+
+      <!-- Game Mode & Difficulty Selector -->
+      <section class="controls-panel">
+        <div class="mode-switch-group">
+          <button id="mode-pvp" class="glass-pill active" data-mode="pvp">
+            <span class="pill-icon">👥</span>
+            <span>2 Players</span>
+          </button>
+          <button id="mode-pve" class="glass-pill" data-mode="pve">
+            <span class="pill-icon">🤖</span>
+            <span>Vs AI</span>
+          </button>
+        </div>
+
+        <div id="ai-difficulty-wrapper" class="difficulty-wrapper hidden">
+          <label for="ai-difficulty">AI Level:</label>
+          <div class="custom-select-container">
+            <select id="ai-difficulty" class="glass-select">
+              <option value="easy">Casual (Easy)</option>
+              <option value="medium" selected>Tactical (Medium)</option>
+              <option value="hard">Master Mind (Unbeatable)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Turn Indicator Banner -->
+      <div class="turn-status-container">
+        <div id="turn-badge" class="turn-badge x-turn">
+          <span class="pulse-indicator"></span>
+          <span id="turn-icon" class="turn-symbol">✕</span>
+          <span id="turn-text" class="turn-text">Player X's Turn</span>
+        </div>
+      </div>
+
+      <!-- 3x3 Board Arena with Glass Cells & Laser Win Line -->
+      <div class="board-wrapper">
+        <div id="board" class="board-grid">
+          <!-- 9 Interactive Glass Cells -->
+          <button class="cell" data-index="0" aria-label="Cell 1"></button>
+          <button class="cell" data-index="1" aria-label="Cell 2"></button>
+          <button class="cell" data-index="2" aria-label="Cell 3"></button>
+          <button class="cell" data-index="3" aria-label="Cell 4"></button>
+          <button class="cell" data-index="4" aria-label="Cell 5"></button>
+          <button class="cell" data-index="5" aria-label="Cell 6"></button>
+          <button class="cell" data-index="6" aria-label="Cell 7"></button>
+          <button class="cell" data-index="7" aria-label="Cell 8"></button>
+          <button class="cell" data-index="8" aria-label="Cell 9"></button>
+        </div>
+        <!-- Dynamic Glowing Strike Line Canvas/Overlay -->
+        <div id="strike-line" class="strike-line hidden"></div>
+      </div>
+
+      <!-- Scoreboard Display -->
+      <section class="scoreboard">
+        <div class="score-card x-card">
+          <div class="score-avatar">✕</div>
+          <div class="score-info">
+            <span id="x-player-label" class="score-name">Player X</span>
+            <span id="score-x" class="score-val">0</span>
+          </div>
+        </div>
+
+        <div class="score-card tie-card">
+          <div class="score-avatar">−</div>
+          <div class="score-info">
+            <span class="score-name">Draws</span>
+            <span id="score-ties" class="score-val">0</span>
+          </div>
+        </div>
+
+        <div class="score-card o-card">
+          <div class="score-avatar">○</div>
+          <div class="score-info">
+            <span id="o-player-label" class="score-name">Player O</span>
+            <span id="score-o" class="score-val">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <div class="action-footer">
+        <button id="restart-btn" class="glass-action-btn primary-action">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          <span>Restart Round</span>
+        </button>
+        <button id="reset-scores-btn" class="glass-action-btn secondary-action" title="Reset all scores">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Reset Stats</span>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Victory / Draw Modal Overlay -->
+  <div id="result-modal" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-glow-bg"></div>
+      <div id="modal-icon" class="modal-icon-container">
+        <!-- Dynamic icon inserted via JS -->
+      </div>
+      <h2 id="modal-title" class="modal-title">VICTORY!</h2>
+      <p id="modal-subtitle" class="modal-subtitle">Player X conquers the grid!</p>
+      
+      <div class="modal-actions">
+        <button id="modal-play-again-btn" class="glass-action-btn primary-action glow-pulse">
+          <span>Play Next Round</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
