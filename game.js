@@ -385,22 +385,28 @@
 
     const rectA = cellA.getBoundingClientRect();
     const rectC = cellC.getBoundingClientRect();
-    const gridRect = boardEl.getBoundingClientRect();
+    const wrapperRect = boardWrapper.getBoundingClientRect();
 
-    const startX = (rectA.left + rectA.width / 2) - gridRect.left;
-    const startY = (rectA.top + rectA.height / 2) - gridRect.top;
-    const endX = (rectC.left + rectC.width / 2) - gridRect.left;
-    const endY = (rectC.top + rectC.height / 2) - gridRect.top;
+    const startX = (rectA.left + rectA.width / 2) - wrapperRect.left;
+    const startY = (rectA.top + rectA.height / 2) - wrapperRect.top;
+    const endX = (rectC.left + rectC.width / 2) - wrapperRect.left;
+    const endY = (rectC.top + rectC.height / 2) - wrapperRect.top;
 
     const deltaX = endX - startX;
     const deltaY = endY - startY;
-    const length = Math.hypot(deltaX, deltaY);
+    const baseLength = Math.hypot(deltaX, deltaY);
+    const extraPadding = rectA.width * 0.7; // extend line symmetrically past outer cells
+    const totalLength = baseLength + extraPadding;
     const angle = (Math.atan2(deltaY, deltaX) * 180) / Math.PI;
 
-    strikeLineEl.style.width = `${length}px`;
-    strikeLineEl.style.left = `${startX}px`;
-    strikeLineEl.style.top = `${startY}px`;
-    strikeLineEl.style.transform = `rotate(${angle}deg)`;
+    const midX = (startX + endX) / 2;
+    const midY = (startY + endY) / 2;
+
+    strikeLineEl.style.width = `${totalLength}px`;
+    strikeLineEl.style.left = `${midX}px`;
+    strikeLineEl.style.top = `${midY}px`;
+    strikeLineEl.style.setProperty('--angle', `${angle}deg`);
+    strikeLineEl.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
     strikeLineEl.classList.remove('hidden');
   }
 
