@@ -564,23 +564,32 @@ body {
    ========================================================================== */
 .strike-line {
   position: absolute;
-  height: 6px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #fff, #ffd700, #fff);
+  height: 8px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, transparent, #fff, #ffd700, #fff, transparent);
   box-shadow: 
-    0 0 15px #ffd700,
-    0 0 25px rgba(255, 215, 0, 0.8),
-    0 0 40px rgba(255, 255, 255, 0.9);
+    0 0 16px #ffd700,
+    0 0 30px rgba(255, 215, 0, 0.9),
+    0 0 45px rgba(255, 255, 255, 0.95);
   z-index: 20;
   pointer-events: none;
-  transform-origin: center left;
-  animation: laserShoot 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(var(--angle, 0deg));
+  animation: laserShoot 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes laserShoot {
-  0% { width: 0; opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 1; }
+  0% { 
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scaleX(0); 
+    opacity: 0; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scaleX(1); 
+    opacity: 1; 
+  }
 }
 
 /* ==========================================================================
